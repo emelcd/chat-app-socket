@@ -1,3 +1,5 @@
+import React from "react";
+import { useSocket } from "../context/socket.context";
 import { RandomUser } from "../interfaces/RandomUser.interface";
 
 function MainChat(
@@ -5,6 +7,20 @@ function MainChat(
     selectedChat: RandomUser | null;
   }
 ) {
+  const {socket } = useSocket();
+  const [message, setMessage] = React.useState("");
+  const ref = React.useRef<HTMLInputElement>(null);
+  
+  ref.current?.addEventListener("keydown", (e) => {
+    if (e.keyCode === 13) {
+      socket.emit("send-message", {
+        message: message,
+        chatId: props.selectedChat?.id,
+      });
+      setMessage("");
+    }
+  }, { once: true });
+
   return (
     <div className="h-full relative">
       <header className="border-b-2 p-4 flex flex-row gap-5 rounded">
@@ -39,6 +55,9 @@ function MainChat(
             className="  bg-gray-800 h-10 mb-4 rounded w-full p-2 h-16"
             name="chat-msg"
             id="chat-msg"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            ref={ref}
           />
         </div>
       </main>

@@ -1,26 +1,27 @@
-import React, { useEffect } from 'react'
-import './App.scss'
-import ListChats from './components/ListChats'
-import MainChat from './components/MainChat'
-import { RandomUser } from './interfaces/RandomUser.interface'
+import React, { useEffect } from "react";
+import "./App.scss";
+import ListChats from "./components/ListChats";
+import MainChat from "./components/MainChat";
+import SocketProvider from "./context/socket.context";
+import { RandomUser } from "./interfaces/RandomUser.interface";
 
 function App() {
-  const [selectedChat, setSelectedChat] = React.useState<RandomUser | null>(null)
+  const [selectedChat, setSelectedChat] = React.useState<RandomUser | null>(
+    null
+  );
 
   useEffect(() => {
-    console.log('selectedChat', selectedChat)
-  }, [selectedChat])
+    console.log("selectedChat", selectedChat);
+  }, [selectedChat]);
 
   return (
-    <div className="App bg-gray-900 h-screen text-white">
-      <ListChats  
-        setSelectedChat={setSelectedChat}
-      />
-      <MainChat 
-        selectedChat={selectedChat}
-      />
-    </div>
-  )
+    <SocketProvider>
+      <div className="App bg-gray-900 h-screen text-white">
+        <ListChats setSelectedChat={setSelectedChat} />
+        <MainChat selectedChat={selectedChat} />
+      </div>
+    </SocketProvider>
+  );
 }
 
-export default App
+export default App;
